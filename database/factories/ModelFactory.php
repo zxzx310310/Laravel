@@ -12,6 +12,7 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+/*
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     static $password;
 
@@ -21,4 +22,29 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
     ];
+});
+*/
+
+$factory->define(App\Post::class, function ($faker) {
+	return [
+		'title' => $faker->sentence,
+		'sub_title' => $faker->sentence,
+		'content' => $faker->paragraph,
+		'is_feature' => rand(0, 1),
+		'page_view' => rand(0, 200),
+		'created_at' => $faker->dateTime(),
+		'updated_at' => $faker->dateTime(),
+	];
+});
+
+
+$factory->define(App\Comment::class, function ($faker) {
+	return [
+		'name' => $faker->name,
+		'email' => $faker->email,
+		'content' => $faker->paragraph,
+		'post_id' => rand(1, 20),
+		'created_at' => $faker->dateTime(),
+		'updated_at' => $faker->dateTime(),
+	];
 });

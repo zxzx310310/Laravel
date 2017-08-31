@@ -14,7 +14,7 @@ class RenameSupTitleToSubTitleInPostsTable extends Migration
     public function up()
     {
         Schema::table('posts', function(Blueprint $table){
-            $table->rename('sup_title', 'sub_title');
+            $table->renameColumn('sup_title', 'sub_title');
         });
     }
 
@@ -26,7 +26,7 @@ class RenameSupTitleToSubTitleInPostsTable extends Migration
     public function down()
     {
         Schema::table('posts', function(Blueprint $table){
-            $table->rename('sup_title', 'sub_title');
+            $table->renameColumn('sup_title', 'sub_title');
         });
     }
 }

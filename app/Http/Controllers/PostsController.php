@@ -5,130 +5,103 @@ namespace App\Http\Controllers;
 use DummyFullModelClass;
 use App\lain;
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
+use App\Http\Requests\CommentRequest;
 
 class PostsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  \App\lain  $lain
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $postType = '文章總覽';
-
         $posts = \App\Post::orderBy('created_at', 'desc')
-                            ->get();
-
+                          ->paginate(5);
         $data = compact('postType', 'posts');
-
         return view('posts.index', $data);
     }
-
-
-    public function hot() {
+    public function hot()
+    {
         $postType = '熱門文章';
-
-        $posts = \App\Post::orderBy('page_view', 'desc')
-                            ->orderBy('created_at', 'desc')
-                            ->get();
-
+        $posts = \App\Post::where('page_view', '>=', 100)
+                          ->orderBy('page_view', 'desc')
+                          ->orderBy('created_at', 'desc')
+                          ->paginate(5);
         $data = compact('postType', 'posts');
-
         return view('posts.index', $data);
     }
-
-
-    public function random() {
-        $id = rand(1, 20);
-
-        $post = \App\Post::find($id);
-
+    public function random()
+    {
+        $post = \App\Post::all()->random();
+        if (is_null($post)) {
+            return redirect()->route('posts.index')
+                             ->with('warning', '目前沒有文章');
+        }
         $data = compact('post');
-
         return view('posts.show', $data);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \App\lain  $lain
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('posts.create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @return \Illuminate\Http\Response
-     */
-    public function store()
+    public function store(PostRequest $request)
     {
-        return 'posts.store';
+        $post = \App\Post::create($request->all());
+        return redirect()->route('posts.show', $post->id)
+                         ->with('success', '新增文章完成');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $post = \App\Post::find($id);
-
+        if (is_null($post)) {
+            return redirect()->route('posts.index')
+                             ->with('warning', '找不到該文章');
+        }
+        $post->page_view += 1;
+        $post->save();
         $data = compact('post');
-
         return view('posts.show', $data);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $data - compact('id');
-
+        $post = \App\Post::find($id);
+        if (is_null($post)) {
+            return redirect()->route('posts.index')
+                             ->with('warning', '找不到該文章');
+        }
+        $data = compact('post');
         return view('posts.edit', $data);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
-    public function update($id)
+    public function update($id, PostRequest $request)
     {
-        return 'posts.update'.$id;
+        $post = \App\Post::find($id);
+        if (is_null($post)) {
+            return redirect()->route('posts.index')
+                             ->with('warning', '找不到該文章');
+        }
+        $post->update($request->all());
+        return redirect()->route('posts.show', $post->id)
+                         ->with('success', '文章更新完成');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\lain  $lain
-     * @param  \DummyFullModelClass  $DummyModelVariable
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        return 'posts.destory'.$id;
+        $post = \App\Post::find($id);
+        foreach($post->comments as $comment) {
+            $comment->delete();
+        }
+        $post->delete();
+        return redirect()->route('posts.index')
+                         ->with('success', '刪除文章及留言成功');
     }
-
-    public function comment($id) {
-        return 'posts.comment'.$id;
+    public function comment($id, CommentRequest $request)
+    {
+        $post    = \App\Post::find($id);
+        
+        if (is_null($post)) {
+            return redirect()->route('posts.index')
+                             ->with('warning', '找不到該文章');
+        }
+        $comment = \App\Comment::create($request->all());
+        $post->comments()->save($comment);
+        return redirect()->route('posts.show', $post->id)
+                         ->with('success', '回覆留言成功');
     }
 }

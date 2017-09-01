@@ -24,6 +24,12 @@
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
+            @include('layouts.partials.notification')
+
+            <div class="text-right">
+                <a href="{{ route('posts.create') }}" class="btn btn-primary" role="button">新增</a>
+            </div>
+
             @foreach($posts as $post)
             <div class="post-preview">
                 <a href="{{ route('posts.show', $post->id) }}">
@@ -41,23 +47,7 @@
             
             <!-- Pager -->
             <nav class="text-center">
-                <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
+                {!! $posts->render() !!}
             </nav>
         </div>
     </div>

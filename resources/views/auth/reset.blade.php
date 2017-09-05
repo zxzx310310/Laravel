@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', '註冊作者')
+@section('title', '重設密碼')
 
 @section('content')
 <!-- Page Header -->
@@ -10,9 +10,9 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="page-heading">
-                    <h1>註冊作者</h1>
+                    <h1>重設密碼</h1>
                     <hr class="small">
-                    <span class="subheading">請填寫以下表單成為作者</span>
+                    <span class="subheading">請填寫以下表單重設密碼</span>
                 </div>
             </div>
         </div>
@@ -26,14 +26,7 @@
 
             @include('layouts.partials.notification')
 
-            {!! Form::open(['route' => 'register.process', 'method' => 'post', 'name' => 'sentMessage', 'id' => 'contactForm', 'novalidate']) !!}
-                <div class="row control-group">
-                    <div class="form-group col-xs-12 floating-label-form-group controls">
-                        {!! Form::label('name', '姓名') !!}
-                        {!! Form::text('name', null, ['id' => 'name', 'class' => 'form-control', 'placeholder' => '姓名', 'data-validation-required-message' => '請輸入姓名', 'required']) !!}
-                        <p class="help-block text-danger" style="color: red;">{!! $errors->first('name') !!}</p>
-                    </div>
-                </div>
+            {!! Form::open(['route' => 'resetpassword.process', 'method' => 'post', 'name' => 'sentMessage', 'id' => 'contactForm', 'novalidate']) !!}
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">
                         {!! Form::label('email', '帳號(Email)') !!}
@@ -55,11 +48,14 @@
                         <p class="help-block text-danger" style="color: red;">{!! $errors->first('password_confirmation') !!}</p>
                     </div>
                 </div>
+
+                {!! Form::hidden('token', $token) !!}
+
                 <br>
                 <div id="success"></div>
                 <div class="row">
                     <div class="form-group col-xs-12">
-                        {!! Form::submit('註冊', ['class' => 'btn btn-primary']) !!}
+                        {!! Form::submit('重設密碼', ['class' => 'btn btn-primary']) !!}
                     </div>
                 </div>
             {!! Form::close() !!}

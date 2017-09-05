@@ -27,6 +27,15 @@
                 <li>
                     <a href="{{ route('posts.random') }}">隨機文章</a>
                 </li>
+                <li>
+                    <a href="{{ route('register.index') }}">註冊</a>
+                </li>
+                <li>
+                    <a href="{{ route('login.index') }}">登入</a>
+                </li>
+                <li>
+                    <a href="{{ route('logout.process') }}">登出</a>
+                </li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->

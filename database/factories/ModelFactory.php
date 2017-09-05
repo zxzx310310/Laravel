@@ -48,3 +48,17 @@ $factory->define(App\Comment::class, function ($faker) {
 		'updated_at' => $faker->dateTime(),
 	];
 });
+
+$factory->define(App\User::class, function ($faker) {
+	static $password;
+	
+	return [
+		'name' => $faker->name,
+		'email' => $faker->email,
+		'password' => $password ?: $password = bcrypt('secret'),
+		'remember_token' => str_random(10),
+		'created_at' => $faker->dateTime(),
+		'updated_at' => $faker->dateTime(),
+	];
+
+});

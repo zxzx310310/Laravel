@@ -94,7 +94,9 @@ class PostsController extends Controller
     {   
         $user = Auth::user();
 
-        return view('posts.create', 'user');
+        $data = compact('user');
+
+        return view('posts.create', $data);
     }
 
     public function store(PostRequest $request)

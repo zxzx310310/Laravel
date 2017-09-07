@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -13,7 +14,11 @@ class HomeController extends Controller
     						->orderBy('created_at', 'desc')
     						->paginate(5);
 
-    	$data = compact('postType', 'posts');
+    	$user = Auth::user();
+
+    	$data = compact('postType', 'posts', 'user');
+
+
 
     	return view('posts.index', $data);
     }

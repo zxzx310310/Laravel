@@ -43,6 +43,15 @@
                     <h4>留下您的意見：</h4>
                     {!! Form::open(['route' => ['posts.comment', $post->id], 'method' => 'post', 'role' => 'form']) !!}
                         <div class="form-group">
+                            @if(Auth::check())
+                            {!! Form::label('name', '姓名') !!}
+                            {!! Form::text('name', $user->name, ['id' => 'name', 'class' => 'form-control', 'readonly' => 'value','required']) !!}
+
+                            {!! Form::label('email', 'Email') !!}
+                            {!! Form::email('email', $user->email, ['id' => 'email', 'class' => 'form-control', 'readonly' => 'value', 'required']) !!}
+                            {!! Form::label('content', '內文') !!}
+                            {!! Form::textarea('content', null, ['rows' => 3, 'id' => 'content', 'class' => 'form-control', 'required']) !!}
+                            @else
                             {!! Form::label('name', '姓名') !!}
                             {!! Form::text('name', null, ['id' => 'name', 'class' => 'form-control', 'required']) !!}
 
@@ -50,7 +59,8 @@
                             {!! Form::email('email', null, ['id' => 'email', 'class' => 'form-control', 'required']) !!}
 
                             {!! Form::label('content', '內文') !!}
-                            {!! Form::text('content', null, ['rows' => 3, 'id' => 'content', 'class' => 'form-control', 'required']) !!}                            
+                            {!! Form::textarea('content', null, ['rows' => 3, 'id' => 'content', 'class' => 'form-control', 'required']) !!}
+                            @endif               
                         </div>
                         {!! Form::submit('送出', ['class' => 'btn btn-primary']) !!}
                     {!! Form::close() !!}

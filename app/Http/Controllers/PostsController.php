@@ -10,6 +10,11 @@ use App\Http\Requests\CommentRequest;
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['only' => ['my', 'create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     public function index()
     {
         $postType = '文章總覽';
@@ -18,6 +23,7 @@ class PostsController extends Controller
         $data = compact('postType', 'posts');
         return view('posts.index', $data);
     }
+
     public function hot()
     {
         $postType = '熱門文章';
@@ -28,6 +34,7 @@ class PostsController extends Controller
         $data = compact('postType', 'posts');
         return view('posts.index', $data);
     }
+
     public function random()
     {
         $post = \App\Post::all()->random();
@@ -38,16 +45,49 @@ class PostsController extends Controller
         $data = compact('post');
         return view('posts.show', $data);
     }
+
+    public function my()
+    {
+        $postType = '我的文章';
+        $posts = \App\Post::where('user_id', \Auth::user()->id)
+                          ->orderBy('created_at', 'desc')
+                          ->paginate(5);
+        $data = compact('postType', 'posts');
+        return view('posts.index', $data);
+    }
+
+    public function user($id)
+    {
+        $user = \App\User::find($id);
+
+        if (is_null($user)) {
+            return redirect()->route('posts.index')
+                            ->with('warning', '沒有這個使用者的文章');
+        }
+
+        $postType = $user->name.'的文章';
+
+        $posts = \App\Post::where('user_id', $user->id)
+                            ->orderBy('created_at', 'desc')
+                            ->paginate(5);
+
+        $data = compact('postType', 'posts');
+
+        return view('posts.index', $data);
+    }
+
     public function create()
     {
         return view('posts.create');
     }
+
     public function store(PostRequest $request)
     {
         $post = \App\Post::create($request->all());
         return redirect()->route('posts.show', $post->id)
                          ->with('success', '新增文章完成');
     }
+
     public function show($id)
     {
         $post = \App\Post::find($id);
@@ -60,6 +100,7 @@ class PostsController extends Controller
         $data = compact('post');
         return view('posts.show', $data);
     }
+
     public function edit($id)
     {
         $post = \App\Post::find($id);
@@ -70,6 +111,7 @@ class PostsController extends Controller
         $data = compact('post');
         return view('posts.edit', $data);
     }
+
     public function update($id, PostRequest $request)
     {
         $post = \App\Post::find($id);
@@ -81,6 +123,7 @@ class PostsController extends Controller
         return redirect()->route('posts.show', $post->id)
                          ->with('success', '文章更新完成');
     }
+
     public function destroy($id)
     {
         $post = \App\Post::find($id);
@@ -91,6 +134,7 @@ class PostsController extends Controller
         return redirect()->route('posts.index')
                          ->with('success', '刪除文章及留言成功');
     }
+
     public function comment($id, CommentRequest $request)
     {
         $post    = \App\Post::find($id);

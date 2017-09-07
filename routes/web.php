@@ -50,8 +50,9 @@ Route::post('auth/login', ['as' => 'login.process', 'uses' => 'Auth\LoginControl
 Route::get('auth/logout', ['as' => 'logout.process', 'uses' => 'Auth\LoginController@logout']);
 
 /* Add forgotpassword route */
-Route::get('password/email' , ['as' => 'forgetpassword.index'  , 'uses' => 'Auth\ForgotPasswordController@showLinkRequestForm']);
+Route::get('password/reset' , ['as' => 'forgetpassword.index'  , 'uses' => 'Auth\ForgotPasswordController@showLinkRequestForm']);
 Route::post('password/email', ['as' => 'forgetpassword.process', 'uses' => 'Auth\ForgotPasswordController@sendResetLinkEmail']);
+Route::get('password/reset/{token}', ['as' => 'resetpassword.index'  , 'uses' => 'Auth\ResetPasswordController@showResetForm']);
+Route::post('password/reset', ['as' => 'resetpassword.process', 'uses' => 'Auth\ResetPasswordController@reset']);
 
-Route::get('password/reset/{token}', ['as' => 'resetpassword.index'  , 'uses' => 'Auth\ResetController@showResetForm']);
-Route::post('password/reset', ['as' => 'resetpassword.process', 'uses' => 'Auth\ResetController@reset']);
+//Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@reset']);

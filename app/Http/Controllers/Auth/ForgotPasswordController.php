@@ -30,6 +30,8 @@ class ForgotPasswordController extends Controller
         $this->middleware('guest');
     }
 
+
+
     protected $subject = '您的密碼重設連結';
     protected $redirectPath = '/';
 }

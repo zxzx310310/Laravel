@@ -11,6 +11,13 @@
             </button>
             <a class="navbar-brand" href="{{ route('posts.index') }}">Start Bootstrap</a>
         </div>
+        <div class="user-name">
+            @if(Auth::check())
+                <a href="{{ route('posts.my') }}">{{ $user->name }}</a>
+            @else
+                <a>遊客</a>
+            @endif
+        </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

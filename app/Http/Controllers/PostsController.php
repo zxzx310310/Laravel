@@ -7,6 +7,7 @@ use App\lain;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Http\Requests\CommentRequest;
+use Auth;
 
 class PostsController extends Controller
 {
@@ -20,7 +21,9 @@ class PostsController extends Controller
         $postType = '文章總覽';
         $posts = \App\Post::orderBy('created_at', 'desc')
                           ->paginate(5);
-        $data = compact('postType', 'posts');
+        $user = Auth::user();
+
+        $data = compact('postType', 'posts', 'user');
         return view('posts.index', $data);
     }
 
@@ -31,7 +34,10 @@ class PostsController extends Controller
                           ->orderBy('page_view', 'desc')
                           ->orderBy('created_at', 'desc')
                           ->paginate(5);
-        $data = compact('postType', 'posts');
+
+        $user = Auth::user();
+
+        $data = compact('postType', 'posts', 'user');
         return view('posts.index', $data);
     }
 
@@ -42,7 +48,10 @@ class PostsController extends Controller
             return redirect()->route('posts.index')
                              ->with('warning', '目前沒有文章');
         }
-        $data = compact('post');
+
+        $user = Auth::user();
+
+        $data = compact('post', 'user');
         return view('posts.show', $data);
     }
 
@@ -52,7 +61,10 @@ class PostsController extends Controller
         $posts = \App\Post::where('user_id', \Auth::user()->id)
                           ->orderBy('created_at', 'desc')
                           ->paginate(5);
-        $data = compact('postType', 'posts');
+        
+        $user = Auth::user();
+
+        $data = compact('postType', 'posts', 'user');
         return view('posts.index', $data);
     }
 
@@ -71,14 +83,18 @@ class PostsController extends Controller
                             ->orderBy('created_at', 'desc')
                             ->paginate(5);
 
-        $data = compact('postType', 'posts');
+        $user = Auth::user();
+
+        $data = compact('postType', 'posts', 'user');
 
         return view('posts.index', $data);
     }
 
     public function create()
-    {
-        return view('posts.create');
+    {   
+        $user = Auth::user();
+
+        return view('posts.create', 'user');
     }
 
     public function store(PostRequest $request)
@@ -97,7 +113,10 @@ class PostsController extends Controller
         }
         $post->page_view += 1;
         $post->save();
-        $data = compact('post');
+
+        $user = Auth::user();
+
+        $data = compact('post', 'user');
         return view('posts.show', $data);
     }
 
@@ -114,7 +133,9 @@ class PostsController extends Controller
                                 ->with('warning', '您沒有權限編輯這文章');
         }   
 
-        $data = compact('post');
+        $user = Auth::user();
+
+        $data = compact('post', 'user');
 
         return view('posts.edit', $data);
     }

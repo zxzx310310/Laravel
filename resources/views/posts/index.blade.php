@@ -29,7 +29,7 @@
             <div class="text-right">
                 <a href="{{ route('posts.create') }}" class="btn btn-primary" role="button">新增</a>
             </div>
-
+            
             @foreach($posts as $post)
             <div class="post-preview">
                 <a href="{{ route('posts.show', $post->id) }}">

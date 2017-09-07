@@ -13,7 +13,13 @@ class PostRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if (strtolower($this->input('_method')) == 'patch') {
+            return \App\Post::where('id', $this->route('id'))
+                                ->where('user_id', \Auth::id())
+                                ->exists();
+        } else {
+            return true;    
+        }
     }
     /**
      * Get the validation rules that apply to the request.

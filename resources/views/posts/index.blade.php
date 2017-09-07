@@ -40,7 +40,7 @@
                         {{ $post->sub_title }}
                     </h3>
                 </a>
-                <p class="post-meta">由 <a href="#">Start Bootstrap</a> 發表於 {{ $post->created_at->toDateString() }}</p>
+                <p class="post-meta">由 <a href="{{ route('posts.user', $post->user->id) }}">{{ $post->user->name }}</a> 發表於 {{ $post->created_at->toDateString() }}</p>
             </div>
             <hr>
             @endforeach

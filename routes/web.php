@@ -38,6 +38,9 @@ Route::post('posts/{id}/comment', ['as' => 'posts.comment', 'uses' => 'PostsCont
 Route::get('hot', ['as' => 'posts.hot', 'uses' => 'PostsController@hot']);
 Route::get('random', ['as' => 'posts.random', 'uses' => 'PostsController@random']);
 
+Route::get('my', ['as' => 'posts.my', 'uses' => 'PostsController@my']);
+Route::get('posts/user/{id}', ['as' => 'posts.user', 'uses' => 'PostsController@user']);
+
 /* Add register route. */
 Route::get('auth/register' , ['as' => 'register.index'  , 'uses' => 'Auth\RegisterController@showRegistrationForm']);
 Route::post('auth/register', ['as' => 'register.process', 'uses' => 'Auth\RegisterController@register']);
@@ -55,4 +58,3 @@ Route::post('password/email', ['as' => 'forgetpassword.process', 'uses' => 'Auth
 Route::get('password/reset/{token}', ['as' => 'resetpassword.index'  , 'uses' => 'Auth\ResetPasswordController@showResetForm']);
 Route::post('password/reset', ['as' => 'resetpassword.process', 'uses' => 'Auth\ResetPasswordController@reset']);
 
-//Route::post('password/reset', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@reset']);
